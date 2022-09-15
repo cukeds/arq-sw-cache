@@ -31,7 +31,7 @@ services:
       memcached:
         condition: service_started
     ports:
-      - "8091:8091"
+      - "8091:8090"
   containers-3:
     build: ./containers
     depends_on:
@@ -40,7 +40,7 @@ services:
       memcached:
         condition: service_started
     ports:
-      - "8092:8092"
+      - "8092:8090"
   memcached:
     container_name: memcached
     image: memcached:1.6.16
