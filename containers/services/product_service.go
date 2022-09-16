@@ -15,10 +15,7 @@ type productService struct {
 
 type productServiceInterface interface {
 	GetProductById(id int) (dto.ProductDto, e.ApiError)
-	GetProducts() (dto.ProductsDto, e.ApiError)
-	GetProductsByCategoryId(id int) (dto.ProductsDto, e.ApiError)
-	GetProductsBySearch(query string) (dto.ProductsDto, e.ApiError)
-	GetNProducts(n int) (dto.ProductsDto, e.ApiError)
+	UpdateProduct(id int, desc string) (dto.ProductDto, e.ApiError)
 }
 
 var (
@@ -57,91 +54,19 @@ func (s *productService) GetProductById(id int) (dto.ProductDto, e.ApiError) {
 	return productDto, nil
 }
 
-func (s *productService) GetProducts() (dto.ProductsDto, e.ApiError) {
+func (s *productService) UpdateProduct(id int, desc string) (dto.ProductDto, e.ApiError) {
 
-	var products model.Products = s.productClient.GetProducts()
-	var productsDto dto.ProductsDto
+	var product model.Product = s.productClient.UpdateProduct(id, desc)
 
-	for _, product := range products {
-		var productDto dto.ProductDto
-		productDto.ProductId = product.ProductId
-		productDto.Name = product.Name
-		productDto.Description = product.Description
-		productDto.Price = product.Price
-		productDto.CurrencyId = product.CurrencyId
-		productDto.Stock = product.Stock
-		productDto.Picture = product.Picture
+	var productDto dto.ProductDto
+	productDto.ProductId = product.ProductId
+	productDto.Name = product.Name
+	productDto.Description = product.Description
+	productDto.Price = product.Price
+	productDto.CurrencyId = product.CurrencyId
+	productDto.Stock = product.Stock
+	productDto.Picture = product.Picture
 
-		productsDto = append(productsDto, productDto)
-	}
-
-	log.Debug(productsDto)
-	return productsDto, nil
-}
-
-func (s *productService) GetNProducts(n int) (dto.ProductsDto, e.ApiError) {
-
-	var products model.Products = s.productClient.GetNProducts(n)
-	var productsDto dto.ProductsDto
-
-	for _, product := range products {
-		var productDto dto.ProductDto
-
-		productDto.ProductId = product.ProductId
-		productDto.Name = product.Name
-		productDto.Description = product.Description
-		productDto.Price = product.Price
-		productDto.CurrencyId = product.CurrencyId
-		productDto.Stock = product.Stock
-		productDto.Picture = product.Picture
-
-		productsDto = append(productsDto, productDto)
-	}
-
-	log.Debug(productsDto)
-	return productsDto, nil
-}
-
-func (s *productService) GetProductsByCategoryId(id int) (dto.ProductsDto, e.ApiError) {
-
-	var products model.Products = s.productClient.GetProductsByCategoryId(id)
-	var productsDto dto.ProductsDto
-
-	for _, product := range products {
-		var productDto dto.ProductDto
-		productDto.ProductId = product.ProductId
-		productDto.Name = product.Name
-		productDto.Description = product.Description
-		productDto.Price = product.Price
-		productDto.CurrencyId = product.CurrencyId
-		productDto.Stock = product.Stock
-		productDto.Picture = product.Picture
-
-		productsDto = append(productsDto, productDto)
-	}
-
-	log.Debug(productsDto)
-	return productsDto, nil
-}
-
-func (s *productService) GetProductsBySearch(query string) (dto.ProductsDto, e.ApiError) {
-	var products model.Products
-	products = s.productClient.GetProductsBySearch(query)
-	var productsDto dto.ProductsDto
-
-	for _, product := range products {
-		var productDto dto.ProductDto
-		productDto.ProductId = product.ProductId
-		productDto.Name = product.Name
-		productDto.Description = product.Description
-		productDto.Price = product.Price
-		productDto.CurrencyId = product.CurrencyId
-		productDto.Stock = product.Stock
-		productDto.Picture = product.Picture
-
-		productsDto = append(productsDto, productDto)
-	}
-
-	log.Debug(productsDto)
-	return productsDto, nil
+	log.Debug(productDto)
+	return productDto, nil
 }

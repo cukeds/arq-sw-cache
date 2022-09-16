@@ -35,3 +35,11 @@ func Get(key string) (value dto.ProductDto, apiError e.ApiError) {
 
 	return pDto, nil
 }
+
+func Flush() (apiError e.ApiError) {
+	if err := cache.FlushAll(); err != nil {
+		return e.NewInternalServerApiError(err.Error(), err)
+	}
+	return nil
+
+}

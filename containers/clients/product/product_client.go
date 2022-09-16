@@ -13,11 +13,7 @@ type productClient struct{}
 
 type ProductClientInterface interface {
 	GetProductById(id int) model.Product
-	GetProducts() model.Products
-	GetNProducts(n int) model.Products
-	RemoveStock(id int, amount int) model.Product
-	GetProductsByCategoryId(id int) model.Products
-	GetProductsBySearch(query string) model.Products
+	UpdateProduct(id int, desc string) model.Product
 }
 
 var (
@@ -36,44 +32,12 @@ func (s *productClient) GetProductById(id int) model.Product {
 	return product
 }
 
-func (s *productClient) GetProducts() model.Products {
-	var products model.Products
-	Db.Find(&products)
-
-	log.Debug("Products: ", products)
-
-	return products
-}
-
-func (s *productClient) GetNProducts(n int) model.Products {
-	var products model.Products
-	Db.Order("product_id asc").Limit(n).Find(&products)
-
-	log.Debug("Products: ", products)
-
-	return products
-}
-
-func (s *productClient) RemoveStock(id int, amount int) model.Product {
+func (s *productClient) UpdateProduct(id int, desc string) model.Product {
 	var product model.Product
-	Db.Where("product_id = ?", id).First(&product)
-	Db.Model(&product).Where("product_id = ?", id).Update("stock", product.Stock-amount)
+
+	Db.Model(&product).Where("product_id = ?", id).Update("description", desc)
+	
 	log.Debug("Product: ", product)
 	return product
-}
 
-func (s *productClient) GetProductsByCategoryId(id int) model.Products {
-	var products model.Products
-	Db.Where("category_id = ?", id).Find(&products)
-	log.Debug("Products", products)
-
-	return products
-}
-
-func (s *productClient) GetProductsBySearch(query string) model.Products {
-	var products model.Products
-	Db.Where("name LIKE ?", "%"+query+"%").Find(&products)
-	log.Debug("Products", products)
-
-	return products
 }

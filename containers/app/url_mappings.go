@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 
+	mcache "cache_test/memcached"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -16,15 +17,18 @@ type Body struct {
 func mapUrls() {
 	// Products Mapping
 	router.GET("/product/:product_id", productController.GetProductById)
-	router.GET("/products", productController.GetProducts)
-	router.GET("/products/:category_id", productController.GetProductsByCategoryId)
-	router.GET("/products/search=:searchQuery", productController.GetProductsBySearch)
+	router.PUT("/product", productController.UpdateProduct)
 
 	router.GET("/test", func(context *gin.Context) {
 		body := Body{}
 
 		body.Name = os.Getenv("HOSTNAME")
 		context.JSON(http.StatusAccepted, &body)
+	})
+
+	router.GET("/flush", func(context *gin.Context) {
+		mcache.Flush()
+		context.JSON(http.StatusOK, "Cache Flushed")
 	})
 
 	log.Info("Finishing mappings configurations")

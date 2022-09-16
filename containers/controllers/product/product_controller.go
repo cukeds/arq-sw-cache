@@ -49,54 +49,32 @@ func GetProductById(c *gin.Context) {
 	mcache.Set(tmp_id, res)
 }
 
-func GetProducts(c *gin.Context) {
+func UpdateProduct(c *gin.Context) {
 
-	var productsDto dto.ProductsDto
-	var err error
+	body := Body{}
+	body.Name = os.Getenv("HOSTNAME")
+	log.Info("Container: " + body.Name)
 
-	limit, ok := c.GetQuery("limit")
-	n, _ := strconv.Atoi(limit)
-	if ok {
-		productsDto, err = service.ProductService.GetNProducts(n)
-	} else {
-		productsDto, err = service.ProductService.GetProducts()
-	}
-
-	if err != nil {
+	var productDto dto.ProductDto
+	if err := c.BindJSON(&productDto); err != nil {
+		log.Error(err.Error())
 		c.JSON(http.StatusBadRequest, err.Error())
 		return
 	}
 
-	c.JSON(http.StatusOK, productsDto)
-}
-
-func GetProductsByCategoryId(c *gin.Context) {
-
-	var productsDto dto.ProductsDto
-	id, _ := strconv.Atoi(c.Param("category_id"))
-	productsDto, err := service.ProductService.GetProductsByCategoryId(id)
-
+	var productRDto dto.ProductDto
+	productRDto, err := service.ProductService.UpdateProduct(productDto.ProductId, productDto.Description)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, err.Error())
+		log.Error(err.Error())
+		c.JSON(err.Status(), err.Error())
 		return
 	}
 
-	c.JSON(http.StatusOK, productsDto)
-}
+	c.JSON(http.StatusCreated, productRDto)
 
-func GetProductsBySearch(c *gin.Context) {
-	var productsDto dto.ProductsDto
-	query := c.Param("searchQuery")
-	productsDto, err := service.ProductService.GetProductsBySearch(query)
+	id := string(productRDto.ProductId)
+	setter, _ := json.Marshal(productRDto)
+	mcache.Set(id, setter)
+	log.Info("Data saved in memcached")
 
-	if err != nil {
-		c.JSON(http.StatusBadRequest, err.Error())
-		return
-	}
-
-	if len(productsDto) == 0 {
-		c.JSON(http.StatusOK, []dto.ProductDto{})
-		return
-	}
-	c.JSON(http.StatusOK, productsDto)
 }
