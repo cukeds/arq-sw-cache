@@ -16,7 +16,7 @@ func Init_cache() {
 
 func Set(key string, value []byte) {
 
-	cache.Set(&memcache.Item{Key: key, Value: value})
+	cache.Set(&memcache.Item{Key: key, Value: value, Expiration: 1})
 }
 
 func Get(key string) (value dto.ProductDto, apiError e.ApiError) {

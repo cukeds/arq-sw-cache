@@ -17,7 +17,7 @@ func mapUrls() {
 	router.GET("/product/:product_id", productController.GetProductById)
 	router.PUT("/product", productController.UpdateProduct)
 
-	router.GET("/test", func(context *gin.Context) {
+	router.GET("/ejecucion", func(context *gin.Context) {
 		body := Body{}
 
 		body.Name = os.Getenv("HOSTNAME")
