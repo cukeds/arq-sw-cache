@@ -15,7 +15,7 @@ services:
       timeout: 20s
       retries: 10
   containers-1:
-    build: ./containers
+    build: ./containers/mem
     depends_on:
       dbmysql:
         condition: service_healthy
@@ -24,7 +24,7 @@ services:
     ports:
       - "8090:8090"
   containers-2:
-    build: ./containers
+    build: ./containers/mem
     depends_on:
       dbmysql:
         condition: service_healthy
@@ -33,7 +33,7 @@ services:
     ports:
       - "8091:8090"
   containers-3:
-    build: ./containers
+    build: ./containers/mem
     depends_on:
       dbmysql:
         condition: service_healthy
@@ -41,8 +41,29 @@ services:
         condition: service_started
     ports:
       - "8092:8090"
+  containers-4:
+    build: ./containers/loc
+    depends_on:
+      dbmysql:
+        condition: service_healthy
+    ports:
+      - "8093:8090"
+  containers-5:
+    build: ./containers/loc
+    depends_on:
+      dbmysql:
+        condition: service_healthy
+    ports:
+      - "8094:8090"
+  containers-6:
+    build: ./containers/loc
+    depends_on:
+      dbmysql:
+        condition: service_healthy
+    ports:
+      - "8095:8090"
   memcached:
-    container_name: memcached
+    container_name: cache
     image: memcached:1.6.16
 
     ports:
@@ -55,6 +76,12 @@ services:
       containers-2:
         condition: service_started
       containers-3:
+        condition: service_started
+      containers-4:
+        condition: service_started
+      containers-5:
+        condition: service_started
+      containers-6:
         condition: service_started
     ports:
       - "80:80"

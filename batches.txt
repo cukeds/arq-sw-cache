@@ -1,0 +1,53 @@
+docker compose up --build (PREVIO A CLASE)
+docker compose down (pa cerrarlo hasta presentar)
+
+
+docker compose up (antes de presentar)
+
+/////////////////////////////////////////////////////
+		PRESENTAMOS LOCAL CACHE
+/////////////////////////////////////////////////////
+
+curl -X GET "http://localhost/loc/product/4"
+curl -X GET "http://localhost/loc/product/4"
+curl -X GET "http://localhost/loc/product/4"
+curl -X GET "http://localhost/loc/product/4"
+curl -X GET "http://localhost/loc/product/4"
+curl -X GET "http://localhost/loc/product/4"
+
+
+curl -X GET "http://localhost/loc/product/1"
+curl -X GET "http://localhost/loc/product/1"
+curl -X GET "http://localhost/loc/product/1"
+
+curl -X GET "http://localhost/loc/product/1"
+curl -X GET "http://localhost/loc/product/1"
+curl -X GET "http://localhost/loc/product/1"
+
+curl -X GET "http://localhost/loc/product/2"
+curl -d @json.json -X PUT "http://localhost/loc/product"
+curl -X GET "http://localhost/loc/product/2"
+curl -X GET "http://localhost/loc/product/2"
+
+
+/////////////////////////////////////////////////////
+		PRESENTAMOS MEM CACHE
+/////////////////////////////////////////////////////
+		
+
+
+curl -X GET "http://localhost/mem/product/1"
+curl -d @json.json -X UPDATE "http://localhost/mem/product"
+curl -X GET "http://localhost/mem/product/1"
+curl -X GET "http://localhost/mem/product/1"
+
+
+curl -X GET "http://localhost/mem/product/1"
+curl -X GET "http://localhost/mem/product/1"
+curl -X GET "http://localhost/mem/product/1"
+curl -d @json.json -X UPDATE "http://localhost/mem/product"
+curl -X GET "http://localhost/mem/product/1"
+curl -X GET "http://localhost/mem/product/1"
+curl -X GET "http://localhost/mem/product/1"
+
+(Se puede remplazar por un worker que tire muchos gets)

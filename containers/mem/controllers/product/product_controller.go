@@ -22,6 +22,8 @@ func GetProductById(c *gin.Context) {
 	body := Body{}
 	body.Name = os.Getenv("HOSTNAME")
 	log.Info("Container: " + body.Name)
+	l, _ := service.ProductService.GetProductById(1)
+	log.Info(l)
 
 	var productDto dto.ProductDto
 	tmp_id := c.Param("product_id")
@@ -35,6 +37,7 @@ func GetProductById(c *gin.Context) {
 	}
 
 	id, _ := strconv.Atoi(tmp_id)
+	log.Info(id)
 	productDto, err := service.ProductService.GetProductById(id)
 
 	if err != nil {
@@ -75,6 +78,6 @@ func UpdateProduct(c *gin.Context) {
 	id := string(productRDto.ProductId)
 	setter, _ := json.Marshal(productRDto)
 	mcache.Set(id, setter)
-	log.Info("Data saved in memcached")
+	log.Info("Data saved in cache")
 
 }
