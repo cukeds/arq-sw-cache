@@ -6,21 +6,12 @@ import (
 	service "cache_test/services"
 	log "github.com/sirupsen/logrus"
 	"net/http"
-	"os"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
-type Body struct {
-	Name string `json:"name"`
-}
-
 func GetProductById(c *gin.Context) {
-
-	body := Body{}
-	body.Name = os.Getenv("HOSTNAME")
-	log.Info("Container: " + body.Name)
 
 	var productDto dto.ProductDto
 	tmp_id := c.Param("product_id")
@@ -47,10 +38,6 @@ func GetProductById(c *gin.Context) {
 }
 
 func UpdateProduct(c *gin.Context) {
-
-	body := Body{}
-	body.Name = os.Getenv("HOSTNAME")
-	log.Info("Container: " + body.Name)
 
 	var productDto dto.ProductDto
 	if err := c.BindJSON(&productDto); err != nil {

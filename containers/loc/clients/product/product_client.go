@@ -4,7 +4,6 @@ import (
 	"cache_test/model"
 
 	"github.com/jinzhu/gorm"
-	log "github.com/sirupsen/logrus"
 )
 
 var Db *gorm.DB
@@ -27,8 +26,6 @@ func init() {
 func (s *productClient) GetProductById(id int) model.Product {
 	var product model.Product
 	Db.Where("product_id = ?", id).First(&product)
-	log.Debug("Product: ", product)
-
 	return product
 }
 
@@ -36,8 +33,7 @@ func (s *productClient) UpdateProduct(id int, desc string) model.Product {
 	var product model.Product
 
 	Db.Model(&product).Where("product_id = ?", id).Update("description", desc)
-	
-	log.Debug("Product: ", product)
+
 	return product
 
 }

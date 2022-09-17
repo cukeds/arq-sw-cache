@@ -5,8 +5,6 @@ import (
 	"cache_test/dto"
 	"cache_test/model"
 	e "cache_test/utils/errors"
-
-	log "github.com/sirupsen/logrus"
 )
 
 type productService struct {
@@ -67,6 +65,5 @@ func (s *productService) UpdateProduct(id int, desc string) (dto.ProductDto, e.A
 	productDto.Stock = product.Stock
 	productDto.Picture = product.Picture
 
-	log.Debug(productDto)
 	return productDto, nil
 }
